@@ -1,0 +1,20 @@
+test_cantidades_invalidas (test_novamarket.PruebasNovaMarket.test_cantidades_invalidas) ... ok
+test_catalogo_seis_productos (test_novamarket.PruebasNovaMarket.test_catalogo_seis_productos) ... ok
+test_decorator_precio_y_original (test_novamarket.PruebasNovaMarket.test_decorator_precio_y_original) ... ok
+test_decorator_valida_porcentajes (test_novamarket.PruebasNovaMarket.test_decorator_valida_porcentajes) ... ok
+test_desuscribir (test_novamarket.PruebasNovaMarket.test_desuscribir) ... ok
+test_envio_una_vez (test_novamarket.PruebasNovaMarket.test_envio_una_vez) ... ok
+test_errores_parametros_pedido (test_novamarket.PruebasNovaMarket.test_errores_parametros_pedido) ... ok
+test_factory_tres_facturas (test_novamarket.PruebasNovaMarket.test_factory_tres_facturas) ... ok
+test_factura_suma_lineas (test_novamarket.PruebasNovaMarket.test_factura_suma_lineas) ... ok
+test_factura_vacia (test_novamarket.PruebasNovaMarket.test_factura_vacia) ... ok
+test_observer_eliminar (test_novamarket.PruebasNovaMarket.test_observer_eliminar) ... ok
+test_pedido_total_integrado (test_novamarket.PruebasNovaMarket.test_pedido_total_integrado) ... ok
+test_producto_inmutable (test_novamarket.PruebasNovaMarket.test_producto_inmutable) ... ok
+test_stock_insuficiente_no_muta_carrito (test_novamarket.PruebasNovaMarket.test_stock_insuficiente_no_muta_carrito) ... ok
+test_stock_y_observer_agregar (test_novamarket.PruebasNovaMarket.test_stock_y_observer_agregar) ... ok
+
+----------------------------------------------------------------------
+Ran 15 tests in 0.003s
+
+OK

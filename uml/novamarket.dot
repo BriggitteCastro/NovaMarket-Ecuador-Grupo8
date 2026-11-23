@@ -1,0 +1,60 @@
+digraph G {
+ graph [rankdir=TB, fontname="Arial", bgcolor="white", nodesep=.35, ranksep=.65, splines=polyline, label="NovaMarket Ecuador · Grupo 8 · UML de clases", labelloc=t, fontsize=20];
+ node [shape=record,fontname="Arial",fontsize=10,style=filled,fillcolor="#edf6fa",color="#31556b"];
+ edge [fontname="Arial",fontsize=9,color="#516b7b",arrowsize=.7];
+ subgraph cluster_catalogo {label="Dominio y catálogo";color="#bfd5e0";
+ Producto [label="{Producto «frozen»|+codigo: str\l+nombre: str\l+categoria: str\l+precio_base: Decimal\l}"];
+ Catalogo [label="{Catalogo|-_productos: dict\l|+listar(): tuple\l+buscar(codigo): Producto\l}"];
+ Cliente [label="{Cliente|+nombre: str\l+identificacion: str\l+direccion: str\l+ciudad: str\l+correo: str\l}"];
+ Pedido [label="{Pedido|+carrito: CarritoCompras\l+cliente: Cliente\l+creador: CreadorFactura\l+descuento: Decimal\l+impuesto: Decimal\l+envio: Decimal\l|+preparar_factura(): DatosFactura\l+finalizar(destino): Path\l}"];
+ }
+ subgraph cluster_decorator {label="DECORATOR · estructural";color="#9bd1c4";
+ ComponentePrecio [label="{«interface» ComponentePrecio|+calcular_precio(): Decimal\l}",fillcolor="#d5f5eb"];
+ PrecioBase [label="{PrecioBase|+producto: Producto\l+cantidad: int\l|+calcular_precio(): Decimal\l}"];
+ PrecioSubtotal [label="{PrecioSubtotal|+monto: Decimal\l|+calcular_precio(): Decimal\l}"];
+ DecoradorPrecio [label="{«abstract» DecoradorPrecio|#_componente: ComponentePrecio\l}"];
+ DescuentoDecorator [label="{DescuentoDecorator|+porcentaje: Decimal\l|+calcular_precio(): Decimal\l}"];
+ ImpuestoDecorator [label="{ImpuestoDecorator|+porcentaje: Decimal\l|+calcular_precio(): Decimal\l}"];
+ EnvioDecorator [label="{EnvioDecorator|+costo: Decimal\l|+calcular_precio(): Decimal\l}"];
+ }
+ subgraph cluster_factory {label="FACTORY METHOD · creacional";color="#e5ca95";
+ Factura [label="{«abstract» Factura|+tipo(): str\l+html(datos): str\l}",fillcolor="#fff2d4"];
+ FacturaNacional [label="FacturaNacional"];
+ FacturaExportacion [label="FacturaExportacion"];
+ FacturaSimplificada [label="FacturaSimplificada"];
+ CreadorFactura [label="{«abstract» CreadorFactura|+crear_factura(): Factura\l+emitir(datos,destino): Path\l}",fillcolor="#fff2d4"];
+ CreadorNacional [label="CreadorNacional"];
+ CreadorExportacion [label="CreadorExportacion"];
+ CreadorSimplificada [label="CreadorSimplificada"];
+ DatosFactura [label="{DatosFactura|+numero: str\l+fecha: str\l+lineas: tuple\l+subtotal: Decimal\l+descuento: Decimal\l+impuesto: Decimal\l+envio: Decimal\l+total: Decimal\l}"];
+ LineaFactura [label="{LineaFactura|+codigo: str\l+cantidad: int\l+precio_unitario: Decimal\l+subtotal: Decimal\l+descuento: Decimal\l+impuesto: Decimal\l+total: Decimal\l}"];
+ }
+ subgraph cluster_observer {label="OBSERVER · comportamiento";color="#cbb8e7";
+ Observador [label="{«interface» Observador|+actualizar(evento,producto,cantidad): None\l}",fillcolor="#efe4ff"];
+ CarritoCompras [label="{CarritoCompras|-_items: dict\l-_observadores: list\l|+suscribir(o): None\l+desuscribir(o): None\l+notificar(evento,p,cantidad): None\l+agregar(p,cantidad): None\l+eliminar(codigo,cantidad): None\l+subtotal(): Decimal\l}"];
+ ModuloStock [label="{ModuloStock|+existencias: dict\l+historial: list\l|+validar(p,cantidad): None\l+actualizar(evento,p,cantidad): None\l}"];
+ SistemaRecomendaciones [label="{SistemaRecomendaciones|+historial: list\l|+actualizar(evento,p,cantidad): None\l}"];
+ }
+ PrecioBase -> ComponentePrecio [arrowhead=empty,style=dashed];
+ PrecioSubtotal -> ComponentePrecio [arrowhead=empty,style=dashed];
+ DecoradorPrecio -> ComponentePrecio [arrowhead=empty,style=dashed];
+ DescuentoDecorator -> DecoradorPrecio [arrowhead=empty];
+ ImpuestoDecorator -> DecoradorPrecio [arrowhead=empty];
+ EnvioDecorator -> DecoradorPrecio [arrowhead=empty];
+ DecoradorPrecio -> ComponentePrecio [label="envuelve 1",arrowhead=diamond];
+ PrecioBase -> Producto [label="referencia 1",arrowhead=vee];
+ FacturaNacional -> Factura [arrowhead=empty]; FacturaExportacion -> Factura [arrowhead=empty]; FacturaSimplificada -> Factura [arrowhead=empty];
+ CreadorNacional -> CreadorFactura [arrowhead=empty]; CreadorExportacion -> CreadorFactura [arrowhead=empty]; CreadorSimplificada -> CreadorFactura [arrowhead=empty];
+ CreadorFactura -> Factura [style=dashed,label="crea 1",arrowhead=vee];
+ ModuloStock -> Observador [arrowhead=empty,style=dashed]; SistemaRecomendaciones -> Observador [arrowhead=empty,style=dashed];
+ CarritoCompras -> Observador [label="suscribe 0..*",arrowhead=vee];
+ CarritoCompras -> Producto [label="agrega 0..*",arrowhead=odiamond];
+ Catalogo -> Producto [label="registra 0..*",arrowhead=odiamond];
+ Pedido -> CarritoCompras [label="utiliza 1",arrowhead=vee];
+ Pedido -> Cliente [label="pertenece a 1",arrowhead=vee];
+ Pedido -> CreadorFactura [label="utiliza 1",arrowhead=vee];
+ Pedido -> ComponentePrecio [label="construye decoradores",style=dashed,arrowhead=vee];
+ Pedido -> DatosFactura [label="genera 1",style=dashed,arrowhead=vee];
+ DatosFactura -> LineaFactura [label="contiene 1..*",arrowhead=diamond];
+ Factura -> DatosFactura [label="presenta 1",style=dashed,arrowhead=vee];
+}
